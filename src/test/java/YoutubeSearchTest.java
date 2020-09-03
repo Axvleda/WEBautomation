@@ -1,7 +1,6 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -27,30 +26,51 @@ public class YoutubeSearchTest {
 
 
     private void typeQuery(String queryForSearch){
-        String selector = "input.ytd-searchbox"; // Input Box
+//        String selector = "input.ytd-searchbox"; // Input Box
+//        WebElement element = new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+//        element.sendKeys(queryForSearch);
+//        element.submit();
 
-        WebElement element = new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(selector)));
+        //quicker way
+        driver.findElement(By.xpath("//input[@id='search']")).sendKeys(queryForSearch + Keys.ENTER);
 
-        element.sendKeys(queryForSearch);
-
-        element.submit();
 
         waitForResultsStats();
 
         verifyResultsPage();
     }
 
-    private void waitForResultsStats() {
-        String resultStatsElementID = "portnovschool";
+    private void dismissLogin() {
 
-        new WebDriverWait(driver, 10)
+        try {
+            new WebDriverWait(driver,10).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='dismiss-button']//paper-button"))).click();
+//            driver.findElement(By.xpath("//*[@id='dismiss-button']//paper-button")).click();
+
+            driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='iframe']")));
+            driver.findElement(By.xpath("//*[@id='introAgreeButton' and @role='button']")).click();
+            driver.switchTo().defaultContent();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        //TODO: QUESTION: What is an iFrame and why do i need to switch my webdriver to access any element in it?
+    }
+
+    private void waitForResultsStats() {
+        String resultStatsElementID = "//*[contains(text(),'portnov']";
+
+        WebElement resultsconfirm = new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id(resultStatsElementID)));
+        if (!resultsconfirm.isDisplayed()){
+            dismissLogin();
+        }
     }
 
     public void verifyResultsPage(){
-        String resultStatsElementID = "portnovschool";
 
-        WebElement element = driver.findElement(By.id(resultStatsElementID));
+        //driver.findElement(By.xpath("//*[contains(@id,'text')]")).getText();
+        WebElement element = driver.findElement(By.xpath("//*[contains(@id,'text')]"));
+
+
 
         boolean isResultsDisplayed = element.isDisplayed();
 
@@ -66,6 +86,7 @@ public class YoutubeSearchTest {
 
         typeQuery(queryForSearch);
     }
+
 
     @AfterClass
     public void afterClass() {
