@@ -17,11 +17,13 @@ import org.testng.annotations.Test;
 public class YoutubeSearchTest {
 
     WebDriver driver;
+    String queryForSearch;
 
     @BeforeMethod
     public void setUp() {
         System.setProperty("webdriver.gecko.driver", "src\\resources\\drivers\\win64\\geckodriver.exe");
         driver = new FirefoxDriver();
+        driver.manage().deleteAllCookies();
     }
 
 
@@ -56,10 +58,11 @@ public class YoutubeSearchTest {
     }
 
     private void waitForResultsStats() {
-        String resultStatsElementID = "//*[contains(text(),'portnov']";
+        String resultStatsElementID = "//*[@id='video-count' and contains(text(),'Videos')]";
 
         WebElement resultsconfirm = new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id(resultStatsElementID)));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(resultStatsElementID)));
+
         if (!resultsconfirm.isDisplayed()){
             dismissLogin();
         }
@@ -68,19 +71,21 @@ public class YoutubeSearchTest {
     public void verifyResultsPage(){
 
         //driver.findElement(By.xpath("//*[contains(@id,'text')]")).getText();
-        WebElement element = driver.findElement(By.xpath("//*[contains(@id,'text')]"));
 
+        WebElement subs_count = driver.findElement(By.xpath("//*[@id='subscribers']"));
+        WebElement video_count = driver.findElement(By.xpath("//*[@id='video-count' and contains(text(),'Videos')]"));
 
-
-        boolean isResultsDisplayed = element.isDisplayed();
+        boolean isResultsDisplayed = video_count.isDisplayed();
 
         Assert.assertTrue(isResultsDisplayed);
+
+        System.out.format("The Query for '%s' found a Channel with %s Subscribers and %s uploaded.", queryForSearch, subs_count.getText().split(" ")[0],video_count.getText());
     }
 
 
     @Test
     public void test0001() {
-        String queryForSearch = "Portnov Computer School";
+        queryForSearch = "Portnov Computer School";
 
         driver.get("https://www.youtube.com/");
 
