@@ -1,10 +1,8 @@
-import org.junit.After;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -53,7 +51,7 @@ public class YoutubeSearchTest {
         } catch (TimeoutException e) {
             e.printStackTrace();
         }
-        //FIXME: QUESTION: What is an iFrame and why do i need to switch my WebDriver to access any element in it?
+        //FIXME: QUESTION: What is an iFrame and why do I need to switch my WebDriver to access any element in it?
     }
 
     private void waitForResultsStats() {
