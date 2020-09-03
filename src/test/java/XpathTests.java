@@ -35,11 +35,29 @@ public class XpathTests {
 
         driver.findElement(By.xpath(xpath05));
 
-
         //Set a breakpoint and debug.
         //Click on test# and on "Evaluate" [kleiner taschenrechner im Debugger]
         //Perform methods and stuff
 
+
+
+        String xpath06 = "//*[@name='q' and @title='Search']";
+
+        String xpath07 = "/*[@title='search' and @title='Search']";
+        String xpath08 = "/*[@title='search' or @title='Search']";
+
+        //TODO: try to find the element with contains()
+        String xpath09 = "//<input>[contains(@class,'inputClass')]";
+
+        String xpath10 = "//<input>[starts-with(@class,'inputClass')]";
+
+        String xpath11 = "//*[text()='Log In']";
+
+        String xpath12 = "//*[text()=' Login']";
+
+        String xpath13 = "(//a)[1]";
+        String xpath14 = "(//a)[last()]";
+        String xpath15 = "(//a)[position()=1]";
 
         driver.findElement(By.xpath("//*[@title='Suche']")).sendKeys(
                 "costco" + Keys.ENTER
