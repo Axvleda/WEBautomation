@@ -58,9 +58,10 @@ public class YoutubeSearchTest {
     }
 
 
+    //TODO: Find any WebElement with 'contains()'
     @Test
     public void test0001() {
-        String queryForSearch = "Portnov Computer School";
+        String queryForSearch = "//*[contains(@text,'inputClass')]";
 
         driver.get("https://www.youtube.com/");
 
