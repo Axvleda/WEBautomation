@@ -6,7 +6,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class WindowsHandelsTest {
+public class WindowHandlesTest {
     
     
     WebDriver driver;
@@ -31,8 +31,8 @@ public class WindowsHandelsTest {
         openWindowsPage();
         clickOnLink();
         waitUntilNumberOfWindows(2);
-        int actualWindows;
-        int expectedWindows;
+        int expectedWindows = 2;
+        int actualWindows = driver.getWindowHandles().size();
         Assert.assertEquals(actualWindows, expectedWindows, MyOwnErrorMessages.AMOUNT_OF_WINDOWS);
     }
 
