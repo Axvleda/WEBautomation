@@ -11,6 +11,10 @@ import org.testng.annotations.Test;
 // Open Youtube.
 // Search for "queryForSearch".
 // Verify results and print Details about first Channel that matches "queryForSearch".
+//TODO: Implement user-agent
+// - move comments#
+// -restructure
+// - names and descriptions
 
 
 public class YoutubeSearchTest {
@@ -20,6 +24,7 @@ public class YoutubeSearchTest {
     WebElement subs_count;
     WebElement video_count;
 
+    //TODO: new @Before -- and move driver init there. @BeforeSuite "https://www.tutorialspoint.com/testng/testng_basic_annotations.htm"
     @BeforeMethod
     public void setUp() {
         System.setProperty("webdriver.gecko.driver", "src\\resources\\drivers\\win64\\geckodriver.exe");
@@ -52,6 +57,7 @@ public class YoutubeSearchTest {
             e.printStackTrace();
         }
         //FIXME: QUESTION: What is an iFrame and why do I need to switch my WebDriver to access any element in it?
+        // - you can put a seperate HTML in it.
     }
 
     private void waitForResultsStats() {
@@ -63,6 +69,7 @@ public class YoutubeSearchTest {
     }
 
     public void verifyResultsPage(){
+        //FIXME: WTF IS GOING ON HERE?
         //How many Subscribers does the channel have?
         subs_count = driver.findElement(By.xpath("//*[@id='subscribers']"));
         //How many Videos did the Channel upload?
@@ -74,13 +81,19 @@ public class YoutubeSearchTest {
         System.out.format("The Query for '%s' found a Channel with %s Subscribers and %s uploaded.", queryForSearch, subs_count.getText().split(" ")[0],video_count.getText());
     }
 
+
+    //Test description
     @Test
     public void test0001() {
         queryForSearch = "Portnov Computer School";
         driver.get("https://www.youtube.com/");
         typeQuery(queryForSearch);
+
+        //ASSERTION AT THE END OF TEST
     }
 
+
+    //OWN DESCRIPTION FOR EACH test
     @Test
     public void test0002() {
         queryForSearch = "Neuralink";
@@ -88,12 +101,11 @@ public class YoutubeSearchTest {
         typeQuery(queryForSearch);
     }
 
-
-    //FIXME: QUESTION: Since SetUp() is called before every Test, it also creates new instances of firefox browser - but my @After only closes the most recent.
+    //FIXME: QUESTION: Since SetUp() is called before every Test, it also creates new instances of firefox browser - but my @After only closes the most recent. //call quit()
     // - How can we setup one browser instance for all tests?
     // - How can we call @After after each test?
     @AfterTest
     public void afterTest() {
-        driver.close();
+        driver.quit();
     }
 }
