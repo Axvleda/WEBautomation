@@ -39,6 +39,9 @@ public class WindowsHandelsTest {
     private void waitUntilNumberOfWindows(final int numberOfWindows) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         //TODO: UNDERSTAND lambda expressions "->"
+        // - change to check for titles?
+        // - change to check for anything else
+        // - leetcode.com?
         wait.until(driver -> driver.getWindowHandles().size() == numberOfWindows);
 
 
