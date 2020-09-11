@@ -1,10 +1,9 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 public class WindowHandlesTest {
     
@@ -13,11 +12,13 @@ public class WindowHandlesTest {
 
     //FIXME: for(String eachHandle : windowsHandles){}
 
-    @BeforeMethod
+
+    @BeforeSuite
     public void setUp() {
         System.setProperty("webdriver.gecko.driver", "src\\resources\\drivers\\win64\\geckodriver.exe");
         driver = new FirefoxDriver();
         driver.manage().deleteAllCookies();
+        driver.get("http://the-internet.herokuapp.com/");
     }
 
     @AfterClass
@@ -49,8 +50,10 @@ public class WindowHandlesTest {
     }
 
     private void clickOnLink() {
+        driver.findElement(By.xpath("//*[contains(text(), 'Windows')]")).click();
     }
 
     private void openWindowsPage() {
+        driver.findElement(By.xpath("//a[contains(text(), 'Click')]")).click();
     }
 }

@@ -1,12 +1,11 @@
-import org.openqa.selenium.*;
+ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+ import org.testng.annotations.Test;
 
 
 // Open Youtube.
@@ -32,16 +31,25 @@ public class YoutubeSearchTest {
         driver.manage().deleteAllCookies();
     }
 
-    private void typeQuery(String queryForSearch){
+    private void SearchString(String queryForSearch){
         try {
             //Types our "queryForSearch" into the search field and hits "ENTER".
             driver.findElement(By.xpath("//input[@id='search']")).sendKeys(queryForSearch + Keys.ENTER);
         } catch (org.openqa.selenium.ElementNotInteractableException e) {
-            dismissLogin();
             e.printStackTrace();
         }
 
     }
+
+    void Login() throws NoSuchElementException{
+        try {
+            driver.findElement(By.xpath("//*[@id='remind-me-later-button']")).click();
+            String LoginButton = "//*[@id='buttons']//paper-button[@id='button']";
+            driver.findElement(By.xpath(LoginButton)).click();
+        } finally {
+            driver.findElement(By.xpath("//input[@id='identifierId']")).sendKeys("dnalor618@gmail.com");
+        }
+    };
 
     private void dismissLogin() {
         //If Youtube is visited for the first time, the website asks for Login etc. - We want to dismiss that
@@ -52,22 +60,18 @@ public class YoutubeSearchTest {
             driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='iframe']")));
             driver.findElement(By.xpath("//*[@id='introAgreeButton' and @role='button']")).click();
             driver.switchTo().defaultContent();
-        } catch (TimeoutException e) {
+            System.out.println("Login dismissed.");
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        //FIXME: QUESTION: What is an iFrame and why do I need to switch my WebDriver to access any element in it?
-        // - you can put a seperate HTML in it.
+        //QUESTION: What is an iFrame and why do I need to switch my WebDriver to access any element in it?
+        // - A: You can put a seperate HTML in it.
     }
 
-    private void waitForResultsStats(String resultStatsElementID) {
-        //Confirms that we see at least one channel on results page.
-//        resultStatsElementID = "//*[@id='video-count' and contains(text(),'Videos')]";
+
+    public boolean verifyResultsPage(String resultStatsElementID){
         WebElement resultsconfirm = new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(resultStatsElementID)));
-
-    }
-
-    public boolean verifyResultsPage(){
         //FIXME: WTF IS GOING ON HERE?
         //How many Subscribers does the channel have?
         subs_count = driver.findElement(By.xpath("//*[@id='subscribers']"));
@@ -82,21 +86,24 @@ public class YoutubeSearchTest {
 
     //Test description
     @Test
-    public void test0001() {
+    public void test0001() throws Exception {
         queryForSearch = "Portnov Computer School";
         driver.get("https://www.youtube.com/");
-        typeQuery(queryForSearch);
-        waitForResultsStats("//*[@id='video-count' and contains(text(),'Videos')]");
-        verifyResultsPage();
+        SearchString(queryForSearch);
+        dismissLogin();
+        verifyResultsPage("//*[@id='video-count' and contains(text(),'Videos')]");
         //ASSERTION AT THE END OF TEST
-        Assert.assertTrue(verifyResultsPage());
+        Assert.assertTrue(verifyResultsPage("//*[@id='video-count' and contains(text(),'Videos')]"));
+        Login();
     }
 
-    //FIXME: QUESTION: Since SetUp() is called before every Test, it also creates new instances of firefox browser - but my @After only closes the most recent. //call quit()
-    // - How can we setup one browser instance for all tests? With @BeforeSuite
-    // - How can we call @After after each test?
     @AfterTest
     public void afterTest() {
         driver.quit();
     }
 }
+
+
+//driver.executeScript("return navigator.userAgent");
+//driver.manage().deleteAllCookies();
+//driver.manage().getCookies();
