@@ -138,42 +138,31 @@ public class WindowHandlesTest {
         //Test004 
         openHoversLink();
         getFigureDetails();
-        openUser(2);
+        Assert.assertTrue(verifyAmountOfUsers(), "Users in myHashmap and UsersOnSite are not equal.");
     }
 
-    private void openUser(int UserIndex) {
-        if (UserIndex <= HoverNames.size()) {
-            //TODO: Implement url finder in HoverNames and open selected.
-            driver.navigate().to(HoverNames.toString());
-        }
+    private boolean verifyAmountOfUsers() {
+        if (HoverNames.size() == AmountOfUsersOnSite) return true;
+        else return false;
     }
 
     LinkedHashMap<String, String> HoverNames = new LinkedHashMap<>();
+    int AmountOfUsersOnSite;
     private void getFigureDetails() {
 
-        //FIXME: Es greift immer wieder auf das element zu
         Actions actions = new Actions(driver);
         WebElement userContainer = driver.findElement(By.xpath("//div[@class='example']"));
-        for (WebElement currentUser : userContainer.findElements(By.xpath("//div[@class='example']/div"))) {
+        AmountOfUsersOnSite = driver.findElements(By.xpath("//div[@class='example']/div")).size();
+
+        for(int i = 0; i < AmountOfUsersOnSite; i++){
+            String xpathToUser = String.format("//div[@class='example']/div[%d]", i + 1);
+            WebElement currentUser = userContainer.findElement(By.xpath(xpathToUser));
             actions.moveToElement(currentUser);
             actions.build().perform();
             new WebDriverWait(driver,5).until(ExpectedConditions.visibilityOf(currentUser.findElement(By.xpath("//div"))));
-            HoverNames.put(currentUser.findElement(By.xpath("//div/h5")).getText() , currentUser.findElement(By.xpath("//div[@class='figcaption']/a")).getAttribute("href"));
+            HoverNames.put(currentUser.findElement(By.xpath(xpathToUser + "//div/h5")).getText() , currentUser.findElement(By.xpath(xpathToUser + "//div[@class='figcaption']/a")).getAttribute("href"));
             System.out.println("currentUser: " + HoverNames.toString());
         }
-
-//        Actions actions = new Actions(driver);
-//        List<WebElement> HoverElements = driver.findElements(By.xpath("//div[@class='figure']"));
-//
-//        for (WebElement Figure: HoverElements) {
-//            actions.moveToElement(Figure);
-//            actions.build().perform();
-//            //TODO: Implement for each WebElement.
-//            new WebDriverWait(driver,5).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath(Figure + "/div/h5"))));
-//            String name = driver.findElement(By.xpath("//h5")).getText().split(": ")[1];
-//            String url = driver.findElement(By.xpath("//a[contains(text(),'View')]")).getAttribute("href");
-//            HoverNames.put(name, url);
-//        }
     }
 
     private void openHoversLink() {
