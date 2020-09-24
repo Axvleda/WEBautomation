@@ -135,7 +135,7 @@ public class WindowHandlesTest {
 
     @Test
     public void test004() {
-        //Test004 
+        //Tests Mouse-over tasks.
         openHoversLink();
         getFigureDetails();
         Assert.assertTrue(verifyAmountOfUsers(), "Users in myHashmap and UsersOnSite are not equal.");
