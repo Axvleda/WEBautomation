@@ -27,4 +27,16 @@ public class Phone {
 
         System.out.format("myPhone Constructer called. %10s - %10s - %4d %4d", model,color,amoutofMemory,price);
     }
+
+    public void sendMessage(String phoneNumber){
+        System.out.println("Message sent to: " + phoneNumber);
+    }
+
+    public void call(String phoneNumber){
+        System.out.println("Phone call to: " + phoneNumber);
+    }
+
+    public String getModel() {
+        return model;
+    }
 }

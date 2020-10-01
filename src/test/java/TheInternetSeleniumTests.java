@@ -11,6 +11,11 @@ import java.util.*;
 public class TheInternetSeleniumTests {
 
     WebDriver driver;
+    int amountOfCreatedButtons, amountofDeletedButtons;
+    String SimpleAuthLink;
+    ArrayList<String[]> hoverNames = new ArrayList<>();
+    int AmountOfUsersOnSite;
+
 
     @BeforeMethod
     public void setUp() {
@@ -58,7 +63,6 @@ public class TheInternetSeleniumTests {
     }
 
     //Test002 adds 'AmountOfButtons' and then deletes all.
-    int amountOfCreatedButtons, amountofDeletedButtons;
     @Test
     public void test002() {
         int amountOfButtons = 9;
@@ -95,9 +99,6 @@ public class TheInternetSeleniumTests {
         Assert.assertTrue(verifyLogin(), "Login was not successful.");
     }
 
-
-
-    String SimpleAuthLink;
     void getSimpleAuthLink(){
         WebElement LinkElement = driver.findElement(By.xpath("//a[contains(text(),'Basic Auth')]"));
         new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOf(LinkElement));
@@ -106,8 +107,7 @@ public class TheInternetSeleniumTests {
 
     private void enterCredentials() {
         String usernameAndPassword = "admin";
-
-        //FIXME: Since we cannot sendKeys to the Alert, we open the AuthLink with the Credentials in the URL.
+        //Since we cannot sendKeys to the Alert, we open the AuthLink with the Credentials in the URL.
         String urlWithCredentials = String.format("http://%s:%s@%s", usernameAndPassword, usernameAndPassword, SimpleAuthLink);
         driver.navigate().to(urlWithCredentials);
     }
@@ -121,7 +121,7 @@ public class TheInternetSeleniumTests {
         }
     }
 
-    //Tests Mouse-over tasks.
+    //Test4 handles Mouse-over tasks.
     @Test
     public void test004() {
         openHoversLink();
@@ -133,8 +133,6 @@ public class TheInternetSeleniumTests {
         return hoverNames.size() == AmountOfUsersOnSite;
     }
 
-    ArrayList<String[]> hoverNames = new ArrayList<>();
-    int AmountOfUsersOnSite;
     private void getFigureDetails() {
 
         Actions actions = new Actions(driver);
