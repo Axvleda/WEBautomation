@@ -1,4 +1,3 @@
-import com.google.common.collect.Table;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -9,7 +8,7 @@ import org.testng.annotations.*;
 
 import java.util.*;
 
-public class WindowHandlesTest {
+public class TheInternetSeleniumTests {
 
     WebDriver driver;
 
@@ -28,11 +27,11 @@ public class WindowHandlesTest {
         driver.quit();
     }
 
+    //Test001 tries to open # of 'expectedWindows' tabs then close all.
     @Test
     public void test001() {
-        //Test001 tries to open # of 'expectedWindows' tabs then close all.
-        int expectedWindows = 5;
 
+        int expectedWindows = 5;
         openMultipleWindowsLink();
         clickOnLink();
         waitUntilNumberOfWindows(expectedWindows);
@@ -58,15 +57,15 @@ public class WindowHandlesTest {
         }
     }
 
-    int AmountOfCreatedButtons, AmountofDeletedButtons;
+    //Test002 adds 'AmountOfButtons' and then deletes all.
+    int amountOfCreatedButtons, amountofDeletedButtons;
     @Test
     public void test002() {
-        //Test002 adds 'AmountOfButtons' and then deletes all.
-        int AmountOfButtons = 9;
+        int amountOfButtons = 9;
         openAddRemoveElements();
-        addElement(AmountOfButtons);
+        addElement(amountOfButtons);
         deleteElement();
-        Assert.assertEquals(AmountOfCreatedButtons & AmountofDeletedButtons, AmountOfButtons, "AmountOfCreatedButtons: " + AmountOfCreatedButtons + "   AmountofDeletedButtons: " + AmountofDeletedButtons + "  Values should be: " + AmountOfButtons);
+        Assert.assertEquals(amountOfCreatedButtons & amountofDeletedButtons, amountOfButtons, "AmountOfCreatedButtons: " + amountOfCreatedButtons + "   AmountofDeletedButtons: " + amountofDeletedButtons + "  Values should be: " + amountOfButtons);
     }
 
     private void openAddRemoveElements() {
@@ -77,28 +76,26 @@ public class WindowHandlesTest {
         for (int i = 0; i < AmountOfButtons; i++){
             driver.findElement(By.xpath("//button[contains(text(),'Add Element')]")).click();
         }
-        AmountOfCreatedButtons = driver.findElements(By.className("added-manually")).size();
+        amountOfCreatedButtons = driver.findElements(By.className("added-manually")).size();
     }
 
     private void deleteElement() {
         List<WebElement> deleteButtons =  driver.findElements(By.className("added-manually"));
-        AmountofDeletedButtons = deleteButtons.size();
+        amountofDeletedButtons = deleteButtons.size();
         for (WebElement deleteButton : deleteButtons) {
             deleteButton.click();
         }
     }
 
+    //Test003 tries the Authentification.
     @Test
     public void test003() {
-        //Test003 tries the Authentification.
         getSimpleAuthLink();
         enterCredentials();
         Assert.assertTrue(verifyLogin(), "Login was not successful.");
     }
 
-    private void openSimpleAuthLink() {
-        new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Basic Auth')]"))).click();
-    }
+
 
     String SimpleAuthLink;
     void getSimpleAuthLink(){
@@ -108,19 +105,10 @@ public class WindowHandlesTest {
     }
 
     private void enterCredentials() {
-        String UsernameAndPassword = "admin";
-
-        //FIXME: Question: How can we type our credentials into the Alert box?
-        //        new WebDriverWait(driver,5).until(ExpectedConditions.alertIsPresent());
-        //        Alert alert = driver.switchTo().alert();
-        //        String AlertMessage = alert.getText();
-        //        alert.dismiss();
-        //        alert.sendKeys(UsernameAndPassword);
-        //        driver.findElement(By.xpath("//*[contains(text(),'username')]"));
-
+        String usernameAndPassword = "admin";
 
         //FIXME: Since we cannot sendKeys to the Alert, we open the AuthLink with the Credentials in the URL.
-        String urlWithCredentials = String.format("http://%s:%s@%s", UsernameAndPassword, UsernameAndPassword, SimpleAuthLink);
+        String urlWithCredentials = String.format("http://%s:%s@%s", usernameAndPassword, usernameAndPassword, SimpleAuthLink);
         driver.navigate().to(urlWithCredentials);
     }
 
@@ -133,20 +121,19 @@ public class WindowHandlesTest {
         }
     }
 
+    //Tests Mouse-over tasks.
     @Test
     public void test004() {
-        //Tests Mouse-over tasks.
         openHoversLink();
         getFigureDetails();
         Assert.assertTrue(verifyAmountOfUsers(), "Users in myHashmap and UsersOnSite are not equal.");
     }
 
     private boolean verifyAmountOfUsers() {
-        if (HoverNames.size() == AmountOfUsersOnSite) return true;
-        else return false;
+        return hoverNames.size() == AmountOfUsersOnSite;
     }
 
-    LinkedHashMap<String, String> HoverNames = new LinkedHashMap<>();
+    ArrayList<String[]> hoverNames = new ArrayList<>();
     int AmountOfUsersOnSite;
     private void getFigureDetails() {
 
@@ -160,8 +147,8 @@ public class WindowHandlesTest {
             actions.moveToElement(currentUser);
             actions.build().perform();
             new WebDriverWait(driver,5).until(ExpectedConditions.visibilityOf(currentUser.findElement(By.xpath("//div"))));
-            HoverNames.put(currentUser.findElement(By.xpath(xpathToUser + "//div/h5")).getText() , currentUser.findElement(By.xpath(xpathToUser + "//div[@class='figcaption']/a")).getAttribute("href"));
-            System.out.println("currentUser: " + HoverNames.toString());
+            hoverNames.add(new String[]{currentUser.findElement(By.xpath(xpathToUser + "//div/h5")).getText(), currentUser.findElement(By.xpath(xpathToUser + "//div[@class='figcaption']/a")).getAttribute("href")});
+            System.out.println("currentUser: " + Arrays.toString(hoverNames.get(i)));
         }
     }
 
