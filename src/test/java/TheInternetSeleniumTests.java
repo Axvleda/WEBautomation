@@ -11,10 +11,10 @@ import java.util.*;
 public class TheInternetSeleniumTests {
 
     WebDriver driver;
-    int amountOfCreatedButtons, amountofDeletedButtons;
-    String SimpleAuthLink;
+    int amountOfCreatedButtons, amountOfDeletedButtons;
+    String simpleAuthLink;
     ArrayList<String[]> hoverNames = new ArrayList<>();
-    int AmountOfUsersOnSite;
+    int amountOfUsersOnSite;
 
 
     @BeforeMethod
@@ -69,7 +69,7 @@ public class TheInternetSeleniumTests {
         openAddRemoveElements();
         addElement(amountOfButtons);
         deleteElement();
-        Assert.assertEquals(amountOfCreatedButtons & amountofDeletedButtons, amountOfButtons, "AmountOfCreatedButtons: " + amountOfCreatedButtons + "   AmountofDeletedButtons: " + amountofDeletedButtons + "  Values should be: " + amountOfButtons);
+        Assert.assertEquals(amountOfCreatedButtons & amountOfDeletedButtons, amountOfButtons, "AmountOfCreatedButtons: " + amountOfCreatedButtons + "   AmountofDeletedButtons: " + amountOfDeletedButtons + "  Values should be: " + amountOfButtons);
     }
 
     private void openAddRemoveElements() {
@@ -85,7 +85,7 @@ public class TheInternetSeleniumTests {
 
     private void deleteElement() {
         List<WebElement> deleteButtons =  driver.findElements(By.className("added-manually"));
-        amountofDeletedButtons = deleteButtons.size();
+        amountOfDeletedButtons = deleteButtons.size();
         for (WebElement deleteButton : deleteButtons) {
             deleteButton.click();
         }
@@ -102,13 +102,13 @@ public class TheInternetSeleniumTests {
     void getSimpleAuthLink(){
         WebElement LinkElement = driver.findElement(By.xpath("//a[contains(text(),'Basic Auth')]"));
         new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOf(LinkElement));
-        SimpleAuthLink = LinkElement.getAttribute("href").replace("http://","");
+        simpleAuthLink = LinkElement.getAttribute("href").replace("http://","");
     }
 
     private void enterCredentials() {
         String usernameAndPassword = "admin";
         //Since we cannot sendKeys to the Alert, we open the AuthLink with the Credentials in the URL.
-        String urlWithCredentials = String.format("http://%s:%s@%s", usernameAndPassword, usernameAndPassword, SimpleAuthLink);
+        String urlWithCredentials = String.format("http://%s:%s@%s", usernameAndPassword, usernameAndPassword, simpleAuthLink);
         driver.navigate().to(urlWithCredentials);
     }
 
@@ -130,16 +130,16 @@ public class TheInternetSeleniumTests {
     }
 
     private boolean verifyAmountOfUsers() {
-        return hoverNames.size() == AmountOfUsersOnSite;
+        return hoverNames.size() == amountOfUsersOnSite;
     }
 
     private void getFigureDetails() {
 
         Actions actions = new Actions(driver);
         WebElement userContainer = driver.findElement(By.xpath("//div[@class='example']"));
-        AmountOfUsersOnSite = driver.findElements(By.xpath("//div[@class='example']/div")).size();
+        amountOfUsersOnSite = driver.findElements(By.xpath("//div[@class='example']/div")).size();
 
-        for(int i = 0; i < AmountOfUsersOnSite; i++){
+        for(int i = 0; i < amountOfUsersOnSite; i++){
             String xpathToUser = String.format("//div[@class='example']/div[%d]", i + 1);
             WebElement currentUser = userContainer.findElement(By.xpath(xpathToUser));
             actions.moveToElement(currentUser);

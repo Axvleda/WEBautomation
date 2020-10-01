@@ -1,74 +1,58 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import pages.MainPageForGoogleTest;
+import pages.ResultsPageForGoogleTest;
 
-public class GoogleSearchTest {
-
-    WebDriver driver;
-
-    @BeforeMethod
-    public void setUp() {
-//        System.setProperty("webdriver.gecko.driver", "src\\resources\\drivers\\win64\\geckodriver.exe");
-//        driver = new FirefoxDriver();
-        System.setProperty("webdriver.chrome.driver", "src\\resources\\drivers\\win32\\chromedriver.exe");
-        driver = new ChromeDriver();
-    }
-
-    private void typeQuery(String queryForSearch){
-        String selector = ".gLFyf"; // Input Box
-
-        WebElement element = driver.findElement(By.cssSelector(selector));
-
-        element.sendKeys(queryForSearch);
-
-        element.submit();
-
-        waitForResultsStats();
-
-        verifyResultsPage();
-
-    }
-
-    private void waitForResultsStats() {
-        String resultStatsElementID = "result-stats";
-
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id(resultStatsElementID)));
-    }
-
-    public void verifyResultsPage(){
-         String resultStatsElementID = "result-stats";
+public class GoogleSearchTest extends BaseTest{
 
 
-         WebElement element = driver.findElement(By.id(resultStatsElementID));
 
-         boolean isResultsDisplayed = element.isDisplayed();
 
-        Assert.assertTrue(isResultsDisplayed);
-    }
 
 
     @Test
-    public void test0001() {
-        String queryForSearch = "Portnov Computer School";
+    public void test001() {
+        String queryForSearch = "Portnov Computer Schhool";
 
-        driver.get("https://www.google.de/");
+        MainPageForGoogleTest mainPage = new MainPageForGoogleTest(driver);
+        mainPage.open();
+        mainPage.typeQuery(queryForSearch);
 
-        typeQuery(queryForSearch);
+        ResultsPageForGoogleTest resultsPage = new ResultsPageForGoogleTest(driver);
+        resultsPage.waitForResultsStats();
+        boolean elementIsVisible = resultsPage.verifyResultsPage();
 
-
+        Assert.assertTrue(elementIsVisible);
     }
 
-    @AfterClass
-    public void afterClass() {
-        driver.close();
+    @Parameters({ "queryText "})
+    @Test
+    public void test002( String param01) {
+
+        MainPageForGoogleTest mainPage = new MainPageForGoogleTest(driver);
+        mainPage.open();
+        mainPage.typeQuery(param01);
+
+        ResultsPageForGoogleTest resultsPage = new ResultsPageForGoogleTest(driver);
+        resultsPage.waitForResultsStats();
+        boolean elementIsVisible = resultsPage.verifyResultsPage();
+
+        Assert.assertTrue(elementIsVisible);
+    }
+
+    @Test
+    public void test_SearchWithParameters( String param01) {
+        String queryForSearch = param01;
+
+        MainPageForGoogleTest mainPage = new MainPageForGoogleTest(driver);
+        mainPage.open();
+        mainPage.typeQuery(queryForSearch);
+
+        ResultsPageForGoogleTest resultsPage = new ResultsPageForGoogleTest(driver);
+        resultsPage.waitForResultsStats();
+        boolean elementIsVisible = resultsPage.verifyResultsPage();
+
+        Assert.assertTrue(elementIsVisible);
     }
 }
