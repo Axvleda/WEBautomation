@@ -56,3 +56,17 @@ public class GoogleSearchTest extends BaseTest{
         Assert.assertTrue(elementIsVisible);
     }
 }
+
+
+//FIXME: finalHOMEWORK
+// - BaseTest Class with selection of browserType, setup & teardown.
+// - Main Page  with this.driver, open & interaction.
+// - Results Page with verification.
+// - testNG.xml with Parameters Test
+// - CHECK: Aleks Github for Testng
+
+
+
+
+
+
