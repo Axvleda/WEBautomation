@@ -13,7 +13,7 @@ import org.testng.annotations.BeforeClass;
 // Verify results and print Details about first Channel that matches "queryForSearch".
 //TODO: Implement user-agent
 // - move comments#
-// -restructure
+// - restructure
 // - names and descriptions
 
 

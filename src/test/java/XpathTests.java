@@ -46,7 +46,7 @@ public class XpathTests {
         String xpath07 = "/*[@title='search' and @title='Search']";
         String xpath08 = "/*[@title='search' or @title='Search']";
 
-        //TODO: try to find the element with contains()
+        //DONE: try to find the element with contains()
         String xpath09 = "//<input>[contains(@class,'inputClass')]";
 
         String xpath10 = "//<input>[starts-with(@class,'inputClass')]";
