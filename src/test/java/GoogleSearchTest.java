@@ -7,10 +7,6 @@ import pages.ResultsPageForGoogleTest;
 public class GoogleSearchTest extends BaseTest{
 
 
-
-
-
-
     @Test
     public void test001() {
         String queryForSearch = "Portnov Computer Schhool";

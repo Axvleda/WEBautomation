@@ -13,7 +13,7 @@ public class BaseTest {
     @Parameters({ "browser" })
     @BeforeMethod
     public void setUp() {
-        System.setProperty("webdriver.gecko.driver", "src\\resources\\drivers\\win64\\geckodriver.exe");
+        System.setProperty("webdriver.gecko.driver", "src/resources/drivers/Firefox/geckodriver.exe");
         driver = new FirefoxDriver();
         driver.manage().deleteAllCookies();
         driver.manage().window().setPosition(new Point(-1685,22));
